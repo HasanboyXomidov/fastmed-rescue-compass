@@ -1,13 +1,31 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+
+import React, { useState, useEffect } from 'react';
+import LoginPage from '../components/LoginPage';
+import { useNavigate } from 'react-router-dom';
 
 const Index = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
+  
+  useEffect(() => {
+    // Check if user is already logged in
+    const isAuthenticated = localStorage.getItem('fastMed_isLoggedIn') === 'true';
+    if (isAuthenticated) {
+      setIsLoggedIn(true);
+      navigate('/map');
+    }
+  }, [navigate]);
+
+  const handleLogin = (email: string, password: string) => {
+    // In a real app, we would validate credentials with a backend
+    // For this MVP, we'll just store login state in localStorage
+    localStorage.setItem('fastMed_isLoggedIn', 'true');
+    localStorage.setItem('fastMed_userEmail', email);
+    setIsLoggedIn(true);
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-gray-600">Start building your amazing project here!</p>
-      </div>
-    </div>
+    <LoginPage onLogin={handleLogin} />
   );
 };
 
