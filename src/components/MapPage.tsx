@@ -1,11 +1,11 @@
 
 import React, { useState, useEffect } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents } from 'react-leaflet';
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
-import { MapPin, Send, Navigation, LogOut } from "lucide-react";
-import { Icon } from 'leaflet';
+import { MapPin, Send, Navigation, LogOut, HeartPulse } from "lucide-react";
+import L from 'leaflet';
 import { Geolocation } from '@capacitor/geolocation';
 import { useNavigate } from 'react-router-dom';
 
@@ -13,18 +13,14 @@ interface MapPageProps {
   onLogout: () => void;
 }
 
-// Create custom marker icons
-const createMarkerIcon = (iconUrl: string) => {
-  return new Icon({
-    iconUrl,
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-    popupAnchor: [1, -34],
-  });
-};
+interface SelectedLocation {
+  lat: number;
+  lng: number;
+  address?: string;
+}
 
-// We'll use the default leaflet marker for now
-const markerIcon = new Icon({
+// Create default marker icons
+const markerIcon = L.icon({
   iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
   shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
   iconSize: [25, 41],
@@ -32,12 +28,6 @@ const markerIcon = new Icon({
   popupAnchor: [1, -34],
   shadowSize: [41, 41]
 });
-
-interface SelectedLocation {
-  lat: number;
-  lng: number;
-  address?: string;
-}
 
 const MapPage: React.FC<MapPageProps> = ({ onLogout }) => {
   const [currentLocation, setCurrentLocation] = useState<SelectedLocation | null>(null);
@@ -139,7 +129,7 @@ const MapPage: React.FC<MapPageProps> = ({ onLogout }) => {
 
   // Map click handler component
   const MapClickHandler = () => {
-    useMapEvents({
+    const map = useMapEvents({
       click: (e) => {
         const { lat, lng } = e.latlng;
         setSelectedLocation({
@@ -181,7 +171,7 @@ const MapPage: React.FC<MapPageProps> = ({ onLogout }) => {
         <div className="map-container mb-4">
           {currentLocation ? (
             <MapContainer 
-              center={[currentLocation.lat, currentLocation.lng]} 
+              center={[currentLocation.lat, currentLocation.lng] as [number, number]} 
               zoom={15} 
               scrollWheelZoom={true}
             >
@@ -193,7 +183,7 @@ const MapPage: React.FC<MapPageProps> = ({ onLogout }) => {
               {/* Current location marker */}
               {currentLocation && (
                 <Marker 
-                  position={[currentLocation.lat, currentLocation.lng]} 
+                  position={[currentLocation.lat, currentLocation.lng] as [number, number]} 
                   icon={markerIcon}
                 >
                   <Popup>
@@ -205,7 +195,7 @@ const MapPage: React.FC<MapPageProps> = ({ onLogout }) => {
               {/* Selected location marker */}
               {selectedLocation && selectedLocation !== currentLocation && (
                 <Marker 
-                  position={[selectedLocation.lat, selectedLocation.lng]} 
+                  position={[selectedLocation.lat, selectedLocation.lng] as [number, number]} 
                   icon={markerIcon}
                 >
                   <Popup>
@@ -256,8 +246,9 @@ const MapPage: React.FC<MapPageProps> = ({ onLogout }) => {
               className="emergency-button" 
               onClick={getCurrentLocation}
               disabled={isLoading}
+              variant="default"
             >
-              <Navigation size={20} />
+              <Navigation size={20} className="mr-2" />
               {isLoading ? "Getting Location..." : "Get My Location"}
             </Button>
             
@@ -265,8 +256,9 @@ const MapPage: React.FC<MapPageProps> = ({ onLogout }) => {
               className="emergency-button"
               onClick={sendLocation}
               disabled={isSending || !selectedLocation}
+              variant="destructive"
             >
-              <Send size={20} />
+              <Send size={20} className="mr-2" />
               {isSending ? "Sending..." : "Send Emergency Alert"}
             </Button>
           </div>
@@ -275,8 +267,5 @@ const MapPage: React.FC<MapPageProps> = ({ onLogout }) => {
     </div>
   );
 };
-
-// Missing import for HeartPulse
-import { HeartPulse } from "lucide-react";
 
 export default MapPage;

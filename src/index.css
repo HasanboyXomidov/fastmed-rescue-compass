@@ -93,5 +93,6 @@
 
 /* Style for emergency buttons */
 .emergency-button {
-  @apply font-bold text-white transition-all duration-200;
+  @apply font-bold text-white transition-all duration-200 py-3 flex items-center justify-center;
 }
+
