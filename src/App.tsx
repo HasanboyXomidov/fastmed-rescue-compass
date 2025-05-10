@@ -12,7 +12,7 @@ import Dashboard from "./components/Dashboard";
 
 // Initialize Capacitor plugins
 const initializeCapacitorPlugins = async () => {
-  if (window.Capacitor) {
+  if (typeof window !== 'undefined' && window.hasOwnProperty('Capacitor')) {
     try {
       // Any Capacitor plugin initialization would go here
       console.log("Capacitor plugins initialized");
