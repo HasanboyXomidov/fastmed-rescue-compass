@@ -6,7 +6,6 @@ import { Card } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
 import { MapPin, Send, Navigation, LogOut, HeartPulse } from "lucide-react";
 import L from 'leaflet';
-import { Geolocation } from '@capacitor/geolocation';
 import { useNavigate } from 'react-router-dom';
 
 interface MapPageProps {
@@ -47,8 +46,28 @@ const MapPage: React.FC<MapPageProps> = ({ onLogout }) => {
   const getCurrentLocation = async () => {
     setIsLoading(true);
     try {
-      const position = await Geolocation.getCurrentPosition();
-      const { latitude, longitude } = position.coords;
+      let latitude: number;
+      let longitude: number;
+
+      // Check if we're in a Capacitor environment (mobile device)
+      if (typeof window !== 'undefined' && window.hasOwnProperty('Capacitor')) {
+        // Dynamic import of Capacitor Geolocation to avoid build issues
+        const Geolocation = (await import('@capacitor/geolocation')).Geolocation;
+        const position = await Geolocation.getCurrentPosition();
+        latitude = position.coords.latitude;
+        longitude = position.coords.longitude;
+      } else {
+        // Fallback to browser geolocation API
+        const position = await new Promise<GeolocationPosition>((resolve, reject) => {
+          navigator.geolocation.getCurrentPosition(resolve, reject, {
+            enableHighAccuracy: true,
+            timeout: 10000,
+            maximumAge: 0
+          });
+        });
+        latitude = position.coords.latitude;
+        longitude = position.coords.longitude;
+      }
       
       setCurrentLocation({
         lat: latitude,
