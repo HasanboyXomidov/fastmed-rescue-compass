@@ -5,15 +5,16 @@ import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
 import { HeartPulse, User, Lock } from "lucide-react";
-import { useNavigate } from 'react-router-dom';
+import { Route, useNavigate } from 'react-router-dom';
+import TestMobilePage from './TestMobilePage';
 
 interface LoginPageProps {
-  onLogin: (email: string, password: string) => void;
+  onLogin: (phone: string) => void;
 }
 
 const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+
+  const [phone, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -21,14 +22,15 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!email || !password) {
+    if (!phone) {
       toast({
         title: "Error",
-        description: "Please enter both email and password",
+        description: "Iltimos telefon raqamingizni kiriting",
         variant: "destructive",
       });
       return;
     }
+    
     
     setIsLoading(true);
     
@@ -37,14 +39,19 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
       // For this MVP, we'll just simulate login
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      onLogin(email, password);
+      onLogin(phone);
       toast({
         title: "Success",
         description: "Login successful",
       });
-      navigate('/map');
+      // navigate('/leafmap');
+      // <Route path="/test" element={<TestMobilePage />} />
+      // window.location.href = '/test';
+      window.location.href = '/leafmap';
+      // window.location.href = '/map';
     } catch (error) {
-      toast({
+      console.log(error);      
+      toast({        
         title: "Error",
         description: "Login failed. Please check your credentials.",
         variant: "destructive",
@@ -63,30 +70,17 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
         </div>
         
         <h1 className="text-2xl font-bold text-center mb-6">
-          Emergency Medical Assistance
+          Tezkor tibbiy yordamga ulanish
         </h1>
         
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-2">
-            <div className="flex items-center border rounded-md px-3 py-2 bg-gray-50">
-              <User className="h-4 w-4 text-gray-500 mr-2" />
-              <Input 
-                type="email" 
-                placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="border-none bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0"
-              />
-            </div>
-          </div>
-          
+        <form onSubmit={handleSubmit} className="space-y-4">                    
           <div className="space-y-2">
             <div className="flex items-center border rounded-md px-3 py-2 bg-gray-50">
               <Lock className="h-4 w-4 text-gray-500 mr-2" />
               <Input 
-                type="password" 
-                placeholder="Password"
-                value={password}
+                type="phone" 
+                placeholder="Telefon"
+                value={phone}
                 onChange={(e) => setPassword(e.target.value)}
                 className="border-none bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0"
               />
@@ -103,7 +97,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
         </form>
         
         <p className="text-center text-sm text-gray-500 mt-6">
-          Need urgent help? Login to send your location quickly to emergency services.
+        Tizimga kirish Shoshilinch yordam kerakmi? Joylashuvingizni tezda favqulodda xizmatlarga yuborish uchun tizimga kiring.
         </p>
       </Card>
     </div>

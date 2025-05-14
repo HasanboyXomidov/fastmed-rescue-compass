@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import LoginPage from '../components/LoginPage';
 import { useNavigate } from 'react-router-dom';
+import 'leaflet/dist/leaflet.css';
 
 const Index = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -16,11 +17,11 @@ const Index = () => {
     }
   }, [navigate]);
 
-  const handleLogin = (email: string, password: string) => {
+  const handleLogin = ( phone: string) => {
     // In a real app, we would validate credentials with a backend
     // For this MVP, we'll just store login state in localStorage
     localStorage.setItem('fastMed_isLoggedIn', 'true');
-    localStorage.setItem('fastMed_userEmail', email);
+    localStorage.setItem('fastMed_userPhone', phone);
     setIsLoggedIn(true);
   };
 

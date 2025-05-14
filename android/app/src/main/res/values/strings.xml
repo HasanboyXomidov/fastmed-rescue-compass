@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">FastMed Emergency</string>
+    <string name="title_activity_main">FastMed Emergency</string>
+    <string name="package_name">app.lovable.fastmed.emergency</string>
+    <string name="custom_url_scheme">app.lovable.fastmed.emergency</string>
+</resources>

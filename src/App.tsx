@@ -9,6 +9,8 @@ import Index from "./pages/Index";
 import Map from "./pages/Map";
 import NotFound from "./pages/NotFound";
 import Dashboard from "./components/Dashboard";
+import LocationModal from "./components/LocationModal";
+import TestMobilePage from "./components/TestMobilePage";
 
 // Initialize Capacitor plugins
 const initializeCapacitorPlugins = async () => {
@@ -45,6 +47,16 @@ const App = () => {
                 </Dashboard>
               } 
             />
+            <Route 
+              path="/leafmap" 
+              element={
+                <LocationModal setAddress={function (address: string): void {
+                  throw new Error("Function not implemented.");
+                } }/>
+              } 
+            />
+            <Route path="/test" element={<TestMobilePage />} />
+            
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
