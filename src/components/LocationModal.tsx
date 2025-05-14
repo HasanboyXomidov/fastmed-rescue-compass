@@ -37,15 +37,15 @@ const LocationModal: React.FC<Props> = ({ setAddress }) => {
 
   
   //  <----- web-sockets:start ----->
-  // const ws = new WebSocket("ws://fastmed-api-production.up.railway.app/ws");
+  const ws = new WebSocket("wss://fastmed-api-production.up.railway.app/ws");
 
-// function sendLocation(phone: string, latitude: number, longitude: number) {
-//     ws.send(JSON.stringify({
-//         phone,
-//         latitude,
-//         longitude
-//       }));  
-// }
+function sendLocation(phone: string, latitude: number, longitude: number) {
+    ws.send(JSON.stringify({
+        phone,
+        latitude,
+        longitude
+      }));  
+}
 //#  <----- web-sockets:end ----->
 
 
@@ -113,7 +113,7 @@ const LocationModal: React.FC<Props> = ({ setAddress }) => {
         alert(fastmed_user_phone + " " + selectedLocation.latitude + " " + selectedLocation.longitude);
 
         if (fastmed_user_phone && latitude && longitude) {
-            // sendLocation(fastmed_user_phone, latitude, longitude);
+            sendLocation(fastmed_user_phone, latitude, longitude);
             alert("Lokatsiya jo'natildi!! "+ fastmed_user_phone + " " + latitude + " " + longitude);
         } else {
             alert("Telefon raqamingizni kiritmadingiz.");
