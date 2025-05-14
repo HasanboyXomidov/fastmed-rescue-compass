@@ -3,7 +3,7 @@ import { CapacitorConfig } from '@capacitor/cli';
 const config: CapacitorConfig = {
   appId: 'app.lovable.fastmed.emergency',
   appName: 'FastMed Emergency',
-  webDir: 'dist',//dist , build
+  webDir: 'build',//dist , build
   // bundledWebRuntime: false,
   plugins: {
     Geolocation: {

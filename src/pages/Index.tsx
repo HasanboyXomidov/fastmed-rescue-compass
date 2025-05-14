@@ -13,7 +13,7 @@ const Index = () => {
     const isAuthenticated = localStorage.getItem('fastMed_isLoggedIn') === 'true';
     if (isAuthenticated) {
       setIsLoggedIn(true);
-      navigate('/map');
+      navigate('/leafmap');
     }
   }, [navigate]);
 
